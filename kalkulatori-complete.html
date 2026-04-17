@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulatori — Financa dhe Kontabilitet</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Source+Sans+3:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy: #0f2d6b;
+      --blue: #1a4fa8;
+      --blue-light: #2563c7;
+      --gold: #f5a623;
+      --gold-dark: #d4891a;
+      --green: #67ad3a;
+      --light: #f4f7fb;
+      --text: #1a1e2e;
+      --muted: #64748b;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--text);
+      background: #fff;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: "Playfair Display", serif;
+    }
+
+    a { text-decoration: none; }
+
+    .navbar-custom {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      padding: 18px 0;
+      transition: 0.3s ease;
+      background: transparent;
+    }
+
+    .navbar-custom.scrolled {
+      padding: 9px 0;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 12px 35px rgba(15, 45, 107, 0.12);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Playfair Display", serif;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.35rem;
+    }
+
+    .navbar-custom.scrolled .navbar-brand,
+    .navbar-custom.scrolled .nav-link {
+      color: var(--navy) !important;
+    }
+
+    .logo-box {
+      width: 52px;
+      height: 58px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,0.92) !important;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 8px 13px !important;
+      transition: 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--gold) !important;
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy) !important;
+      font-weight: 800;
+      padding: 10px 24px !important;
+      border-radius: 8px;
+      margin-left: 14px;
+      box-shadow: 0 10px 24px rgba(245,166,35,0.28);
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-dark);
+      color: var(--navy) !important;
+      transform: translateY(-1px);
+    }
+
+    .navbar-toggler {
+      border: 0;
+      box-shadow: none !important;
+      color: #fff;
+    }
+
+    .navbar-custom.scrolled .navbar-toggler {
+      color: var(--navy);
+    }
+
+    .hero {
+      min-height: 92vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--navy);
+      padding-top: 100px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(15,45,107,0.96), rgba(26,79,168,0.82)),
+        url("https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=2000") center/cover;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 620px;
+      height: 620px;
+      right: -180px;
+      bottom: -220px;
+      border-radius: 50%;
+      background: rgba(103,173,58,0.16);
+      filter: blur(8px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 90px 0 110px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--gold);
+      border: 1px solid rgba(245,166,35,0.45);
+      background: rgba(0,0,0,0.18);
+      border-radius: 999px;
+      padding: 7px 18px;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 3px;
+      font-weight: 800;
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 5.3rem);
+      font-weight: 800;
+      line-height: 1.08;
+      margin-bottom: 24px;
+      text-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    }
+
+    .hero h1 span {
+      color: var(--gold);
+    }
+
+    .hero p {
+      max-width: 730px;
+      margin: 0 auto 42px;
+      color: rgba(255,255,255,0.88);
+      font-size: clamp(1.05rem, 2vw, 1.32rem);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--navy);
+      border: 0;
+      font-weight: 800;
+      padding: 15px 34px;
+      border-radius: 8px;
+      transition: 0.25s ease;
+      box-shadow: 0 15px 35px rgba(245,166,35,0.26);
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-dark);
+      color: var(--navy);
+      transform: translateY(-2px);
+    }
+
+    .btn-white-outline {
+      border: 2px solid rgba(255,255,255,0.7);
+      color: #fff;
+      font-weight: 700;
+      padding: 13px 34px;
+      border-radius: 8px;
+      transition: 0.25s ease;
+    }
+
+    .btn-white-outline:hover {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border-color: #fff;
+    }
+
+    .stats-bar {
+      background: var(--blue);
+      border-top: 4px solid var(--gold);
+      color: #fff;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 34px 15px;
+      border-right: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .stat-item:last-child {
+      border-right: 0;
+    }
+
+    .stat-num {
+      font-family: "Playfair Display", serif;
+      color: var(--gold);
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .stat-label {
+      margin-top: 8px;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.78);
+      font-weight: 700;
+    }
+
+    section {
+      padding: 96px 0;
+    }
+
+    .section-tag {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 2.6px;
+      font-weight: 800;
+      font-size: 12px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      color: var(--navy);
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 14px;
+    }
+
+    .section-line {
+      width: 58px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 99px;
+      margin: 0 auto;
+    }
+
+    .section-line.left {
+      margin-left: 0;
+    }
+
+    .section-subtitle {
+      max-width: 680px;
+      margin: 22px auto 0;
+      color: var(--muted);
+      font-size: 1.12rem;
+      line-height: 1.75;
+    }
+
+    .services {
+      background: var(--light);
+    }
+
+    .service-card {
+      height: 100%;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+      transition: 0.3s ease;
+    }
+
+    .service-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--blue), var(--green), var(--gold));
+      opacity: 0;
+      transition: 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 22px 55px rgba(15,45,107,0.14);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .icon-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #eef4fb;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin-bottom: 24px;
+      transition: 0.25s ease;
+    }
+
+    .service-card:hover .icon-circle {
+      background: rgba(103,173,58,0.12);
+      color: var(--green);
+    }
+
+    .service-card h3 {
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--blue);
+      font-size: 1.28rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 26px;
+    }
+
+    .card-link {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .card-link:hover {
+      color: var(--navy);
+    }
+
+    .why-img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 24px;
+      box-shadow: 0 25px 70px rgba(15,45,107,0.2);
+    }
+
+    .experience-badge {
+      position: absolute;
+      right: -24px;
+      bottom: -24px;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 18px 45px rgba(26,79,168,0.28);
+    }
+
+    .experience-badge strong {
+      display: block;
+      color: var(--gold);
+      font-family: "Playfair Display", serif;
+      font-size: 3.1rem;
+      line-height: 1;
+    }
+
+    .why-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .why-icon {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 52px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .why-item h4 {
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 800;
+      color: var(--navy);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .why-item p {
+      color: var(--muted);
+      margin-bottom: 0;
+      line-height: 1.65;
+    }
+
+    .process {
+      background: var(--navy);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .process::before {
+      content: "";
+      position: absolute;
+      width: 650px;
+      height: 650px;
+      right: -220px;
+      top: -250px;
+      background: rgba(37,99,199,0.16);
+      border-radius: 50%;
+      filter: blur(6px);
+    }
+
+    .process .section-title {
+      color: #fff;
+    }
+
+    .process .section-tag {
+      color: var(--gold);
+    }
+
+    .step-card {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 12px;
+    }
+
+    .step-num {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: var(--blue);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Playfair Display", serif;
+      font-weight: 800;
+      font-size: 1.55rem;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.18);
+    }
+
+    .step-card h4 {
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .step-card p {
+      color: rgba(255,255,255,0.72);
+      line-height: 1.7;
+      font-size: 0.98rem;
+    }
+
+    .locations {
+      background: var(--light);
+    }
+
+    .location-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 42px;
+      text-align: center;
+      height: 100%;
+      transition: 0.3s ease;
+      box-shadow: 0 10px 30px rgba(15,45,107,0.04);
+    }
+
+    .location-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(15,45,107,0.13);
+    }
+
+    .location-icon {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: #eef4fb;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+    }
+
+    .location-card h3 {
+      color: var(--navy);
+      font-weight: 800;
+      font-size: 2rem;
+    }
+
+    .location-card ul {
+      list-style: none;
+      padding: 28px 0 0;
+      margin: 28px 0 28px;
+      border-top: 1px solid #e2e8f0;
+      color: var(--muted);
+    }
+
+    .location-card li {
+      margin-bottom: 12px;
+    }
+
+    .badge-soft {
+      background: rgba(245,166,35,0.13);
+      color: var(--gold-dark);
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 10px 22px;
+      display: inline-block;
+    }
+
+    .law-card {
+      background: #f8fafc;
+      border-left: 5px solid var(--gold);
+      border-radius: 16px;
+      padding: 30px;
+      height: 100%;
+      transition: 0.25s ease;
+    }
+
+    .law-card:hover {
+      background: rgba(26,79,168,0.06);
+      transform: translateX(5px);
+    }
+
+    .law-card h3 {
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--navy);
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .law-card p {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .law-card span {
+      color: var(--gold-dark);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      font-weight: 800;
+    }
+
+    .contact {
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .contact-info-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .contact-icon {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 52px;
+      border-radius: 13px;
+      background: #f1f5f9;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+    }
+
+    .contact-info-item h4 {
+      font-family: "Source Sans 3", sans-serif;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-size: 0.86rem;
+      letter-spacing: 0.9px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .contact-info-item p {
+      margin-bottom: 4px;
+      color: #334155;
+    }
+
+    .contact-form {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 42px;
+    }
+
+    .form-label {
+      color: var(--navy);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 12px;
+      padding: 13px 15px;
+      border: 1px solid #cbd5e1;
+      box-shadow: none !important;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(26,79,168,0.12) !important;
+    }
+
+    .footer {
+      background: #050b1a;
+      color: #cbd5e1;
+      padding: 78px 0 28px;
+      border-top: 5px solid var(--gold);
+    }
+
+    .footer h4,
+    .footer h5 {
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 22px;
+    }
+
+    .footer-brand {
+      font-family: "Playfair Display", serif;
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo-box {
+      width: 48px;
+      height: 52px;
+      background: #fff;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .footer-logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .footer p,
+    .footer li,
+    .footer a {
+      color: #94a3b8;
+      line-height: 1.75;
+    }
+
+    .footer a:hover {
+      color: var(--gold);
+    }
+
+    .footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .social a {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      color: #fff;
+      transition: 0.25s ease;
+    }
+
+    .social a:hover {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 22px;
+      margin-top: 50px;
+      font-size: 0.92rem;
+    }
+
+    .fade-up {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        background: #fff;
+        margin-top: 14px;
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 20px 55px rgba(15,45,107,0.18);
+      }
+
+      .navbar-collapse .nav-link {
+        color: var(--navy) !important;
+        padding: 11px 12px !important;
+      }
+
+      .nav-cta {
+        margin-left: 0;
+        margin-top: 8px;
+        text-align: center;
+      }
+
+      .experience-badge {
+        display: none;
+      }
+
+      .why-img {
+        height: 380px;
+      }
+
+      .stat-item {
+        border-right: 0;
+      }
+    }
+
+    @media (max-width: 575px) {
+      section {
+        padding: 72px 0;
+      }
+
+      .hero-content {
+        padding: 70px 0 85px;
+      }
+
+      .hero h1 {
+        font-size: 2.55rem;
+      }
+
+      .btn-gold,
+      .btn-white-outline {
+        width: 100%;
+      }
+
+      .service-card,
+      .location-card,
+      .contact-form {
+        padding: 26px;
+      }
+
+      .logo-box {
+        width: 46px;
+        height: 52px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-custom" id="mainNavbar">
+    <div class="container">
+      <a class="navbar-brand" href="#ballina">
+        <span class="logo-box">
+          <img src="Kalkulatori_Finale_Logo_1776347682598.png" alt="Kalkulatori Logo">
+        </span>
+        <span>Kalkulatori</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="#ballina">Ballina</a></li>
+          <li class="nav-item"><a class="nav-link" href="#sherbimet">Shërbimet</a></li>
+          <li class="nav-item"><a class="nav-link" href="#procesi">Si Punojmë</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ku-operojme">Ku operojmë</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ligjet">Ligjet</a></li>
+          <li class="nav-item"><a class="nav-link" href="#kontakt">Kontakt</a></li>
+          <li class="nav-item"><a class="nav-link nav-cta" href="#kontakt">Na Kontaktoni</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="ballina">
+    <div class="container">
+      <div class="hero-content fade-up">
+        <span class="eyebrow">Ekspertë të Besuar që nga 2010</span>
+        <h1>Zgjidhja Juaj për<br><span>Financa & Kontabilitet</span></h1>
+        <p>
+          Ne ofrojmë shërbime profesionale financiare dhe kontabël për bizneset e vogla,
+          të mesme dhe korporatat e mëdha në Shqipëri dhe Kosovë.
+        </p>
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <a href="#kontakt" class="btn btn-gold">Na Kontaktoni <i class="bi bi-arrow-right ms-2"></i></a>
+          <a href="#sherbimet" class="btn btn-white-outline">Shërbimi Ynë</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="stats-bar">
+    <div class="container">
+      <div class="row g-0">
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-num">500+</div>
+          <div class="stat-label">Klientë Aktivë</div>
+        </div>
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-num">14+</div>
+          <div class="stat-label">Vjet Eksperiencë</div>
+        </div>
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-num">98%</div>
+          <div class="stat-label">Kënaqësia e Klientëve</div>
+        </div>
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-num">€50M+</div>
+          <div class="stat-label">Transaksione</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="services" id="sherbimet">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-tag">Çfarë Ofrojmë</span>
+        <h2 class="section-title">Të gjitha shërbimet</h2>
+        <div class="section-line"></div>
+        <p class="section-subtitle">
+          Ofrojmë zgjidhje gjithëpërfshirëse financiare dhe kontabël të përshtatura sipas
+          nevojave specifike të biznesit tuaj.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="icon-circle"><i class="bi bi-briefcase"></i></div>
+            <h3>Regjistrim Biznesi</h3>
+            <p>Hapje dhe regjistrim i bizneseve. Menaxhojmë të gjithë procesin ligjor dhe administrativ për themelimin e kompanisë suaj.</p>
+            <a class="card-link" href="#kontakt">Mëso Më Shumë <i class="bi bi-chevron-right"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="icon-circle"><i class="bi bi-calculator"></i></div>
+            <h3>Financa dhe Kontabilitet</h3>
+            <p>Kontabilitet, deklarime dhe TVSH. Sigurohemi që llogaritë financiare të biznesit tuaj të jenë gjithmonë në rregull.</p>
+            <a class="card-link" href="#kontakt">Mëso Më Shumë <i class="bi bi-chevron-right"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="icon-circle"><i class="bi bi-bank"></i></div>
+            <h3>Prokurim Publik</h3>
+            <p>Tenderë dhe prokurime publike. Ju ndihmojmë të fitoni tenderët publikë me dokumentacion të plotë dhe strategji fituese.</p>
+            <a class="card-link" href="#kontakt">Mëso Më Shumë <i class="bi bi-chevron-right"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="icon-circle"><i class="bi bi-file-earmark-text"></i></div>
+            <h3>Auditim dhe Raportim</h3>
+            <p>Auditim i brendshëm dhe i jashtëm. Raporte financiare sipas standardeve ndërkombëtare IFRS dhe IAS.</p>
+            <a class="card-link" href="#kontakt">Mëso Më Shumë <i class="bi bi-chevron-right"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="icon-circle"><i class="bi bi-shield-check"></i></div>
+            <h3>Pagat dhe HR</h3>
+            <p>Menaxhimi i pagave, kontributeve pensionale dhe sigurimeve shëndetësore. Administrim i plotë i burimeve njerëzore.</p>
+            <a class="card-link" href="#kontakt">Mëso Më Shumë <i class="bi bi-chevron-right"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="icon-circle"><i class="bi bi-bar-chart-line"></i></div>
+            <h3>Këshillim Financiar</h3>
+            <p>Strategji investimi, planifikim financiar afatgjatë dhe këshillim për rritjen dhe zgjerimin e biznesit tuaj.</p>
+            <a class="card-link" href="#kontakt">Mëso Më Shumë <i class="bi bi-chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pse-ne">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-6 position-relative">
+          <img class="why-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=900" alt="Professional Team">
+          <div class="experience-badge">
+            <strong>14+</strong>
+            <span>Vjet Eksperiencë Profesionale</span>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <span class="section-tag">Pse Ne</span>
+          <h2 class="section-title">Partnerë të Besueshëm për Financat Tuaja</h2>
+          <div class="section-line left"></div>
+          <p class="section-subtitle mx-0">
+            Ekipi ynë i ekspertëve me mbi 14 vjet eksperiencë ofron shërbime të certifikuara
+            sipas standardeve ndërkombëtare. Ne kemi ndihmuar mbi 500 biznese të rrisin
+            eficiencën financiare dhe të sigurojnë konformitet të plotë ligjor.
+          </p>
+
+          <div class="mt-5">
+            <div class="why-item">
+              <div class="why-icon"><i class="bi bi-check2-circle"></i></div>
+              <div>
+                <h4>Ekspertë të Certifikuar</h4>
+                <p>Të gjithë kontabilistët tanë posedojnë çertifikata ndërkombëtare.</p>
+              </div>
+            </div>
+
+            <div class="why-item">
+              <div class="why-icon"><i class="bi bi-check2-circle"></i></div>
+              <div>
+                <h4>Raportim në Kohë Reale</h4>
+                <p>Klientët tanë kanë qasje 24/7 në platformat dixhitale dhe raporte të përditësuara.</p>
+              </div>
+            </div>
+
+            <div class="why-item">
+              <div class="why-icon"><i class="bi bi-check2-circle"></i></div>
+              <div>
+                <h4>Konfidencialitet Total</h4>
+                <p>Informacionet financiare të klientëve tona mbrohen me protokollet më të larta të sigurisë.</p>
+              </div>
+            </div>
+
+            <div class="why-item">
+              <div class="why-icon"><i class="bi bi-check2-circle"></i></div>
+              <div>
+                <h4>Mbështetje 24/7</h4>
+                <p>Jemi gjithmonë në dispozicion për pyetjet dhe nevojat urgjente financiare.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="process" id="procesi">
+    <div class="container position-relative">
+      <div class="text-center mb-5">
+        <span class="section-tag">Si Funksionojmë</span>
+        <h2 class="section-title">Procesi Ynë i Punës</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h4>Konsultimi Fillestar</h4>
+            <p>Takohemi me ju falas për të kuptuar nevojat dhe objektivat e biznesit tuaj.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h4>Analiza dhe Planifikimi</h4>
+            <p>Analizojmë situatën financiare dhe hartojmë një plan të personalizuar.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h4>Implementimi</h4>
+            <p>Zbatojmë zgjidhjet e dakordësuara me saktësi dhe profesionalizëm të plotë.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-num">04</div>
+            <h4>Monitorimi Vazhdues</h4>
+            <p>Monitorojmë rezultatet dhe optimizojmë vazhdimisht për suksesin e biznesit tuaj.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="locations" id="ku-operojme">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-tag">Prezenca Jonë</span>
+        <h2 class="section-title">Ku operojmë</h2>
+        <div class="section-line"></div>
+        <p class="section-subtitle">
+          Ne ofrojmë shërbime profesionale në të gjithë Shqipërinë dhe Kosovën,
+          duke qenë pranë klientëve tanë kudo që ndodhen.
+        </p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-6">
+          <div class="location-card">
+            <div class="location-icon"><i class="bi bi-geo-alt"></i></div>
+            <h3>Shqipëri</h3>
+            <p>Tiranë, Durrës, Elbasan, Shkodër, Vlorë, Fier, Korçë, dhe të gjitha qytetet e tjera.</p>
+            <ul>
+              <li><i class="bi bi-geo-alt text-primary me-2"></i>Zyra Qendrore: Tiranë, Rr. Dëshmorët e Kombit</li>
+              <li><i class="bi bi-telephone text-primary me-2"></i>+355 4 123 4567</li>
+              <li><i class="bi bi-envelope text-primary me-2"></i>info.al@kalkulatori.com</li>
+            </ul>
+            <span class="badge-soft">Shërbim në të gjithë Shqipërinë</span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="location-card">
+            <div class="location-icon"><i class="bi bi-building"></i></div>
+            <h3>Kosovë</h3>
+            <p>Prishtinë, Prizren, Pejë, Gjakovë, Mitrovicë, Ferizaj, Gjilan dhe më gjerë.</p>
+            <ul>
+              <li><i class="bi bi-geo-alt text-primary me-2"></i>Zyra Qendrore: Prishtinë, Rr. Nëna Terezë</li>
+              <li><i class="bi bi-telephone text-primary me-2"></i>+383 44 000 000</li>
+              <li><i class="bi bi-envelope text-primary me-2"></i>info.ks@kalkulatori.com</li>
+            </ul>
+            <span class="badge-soft">Shërbim në të gjithë Kosovën</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ligjet">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-tag">Kuadri Ligjor</span>
+        <h2 class="section-title">Ligjet dhe Rregulloret</h2>
+        <div class="section-line"></div>
+        <p class="section-subtitle">
+          Ne operojmë në përputhje të plotë me legjislacionin në fuqi në Shqipëri dhe Kosovë,
+          duke garantuar siguri dhe konformitet për klientët tanë.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="law-card">
+            <h3>Ligji për Kontabilitetin</h3>
+            <p>Rregullon organizimin dhe funksionimin e kontabilitetit në subjektet afariste.</p>
+            <span>Ligji Nr. 08/L-017 (KS) | Ligji Nr. 9228 (AL)</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="law-card">
+            <h3>Ligji për TVSH</h3>
+            <p>Përcakton regjimin e TVSH-së, detyrimet e tatimpaguesve.</p>
+            <span>Ligji Nr. 05/L-037 (KS) | Ligji Nr. 9638 (AL)</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="law-card">
+            <h3>Ligji për Tatimin në të Ardhura</h3>
+            <p>Rregullon tatimin mbi fitimin e bizneseve, normat tatimore.</p>
+            <span>Ligji Nr. 06/L-024 (KS) | Ligji Nr. 8438 (AL)</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="law-card">
+            <h3>Standardet IFRS</h3>
+            <p>Zbatimi i standardeve IFRS për përgatitjen e pasqyrave financiare.</p>
+            <span>Aplikuar nga të dyja shtetet</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="law-card">
+            <h3>Ligji i Punës</h3>
+            <p>Përcakton të drejtat dhe detyrimet e punëdhënësve dhe punëmarrësve.</p>
+            <span>Ligji Nr. 03/L-212 (KS) | Ligji Nr. 7961 (AL)</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="law-card">
+            <h3>Mbrojtja e të Dhënave</h3>
+            <p>Garanton mbrojtjen e të dhënave personale në përputhje me GDPR.</p>
+            <span>Ligji Nr. 06/L-082 (KS) | Ligji Nr. 9887 (AL)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="kontakt">
+    <div class="container">
+      <div class="row g-5 align-items-start">
+        <div class="col-lg-5">
+          <span class="section-tag">Na Kontaktoni</span>
+          <h2 class="section-title">Jemi Këtu për Ju</h2>
+          <div class="section-line left"></div>
+
+          <p class="section-subtitle mx-0">
+            Konsultimi i parë është gjithmonë falas. Na kontaktoni dhe do t'ju
+            kthejmë përgjigje brenda 24 orëve.
+          </p>
+
+          <div class="mt-5">
+            <div class="contact-info-item">
+              <div class="contact-icon">
+                <i class="bi bi-geo-alt"></i>
+              </div>
+              <div>
+                <h4>Adresa</h4>
+                <p><strong>Kosovë:</strong> Rr. Nëna Terezë, Nr. 42, Prishtinë</p>
+                <p><strong>Shqipëri:</strong> Rr. Dëshmorët e Kombit, Tiranë</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-icon">
+                <i class="bi bi-telephone"></i>
+              </div>
+              <div>
+                <h4>Telefon</h4>
+                <p>Kosovë: +383 44 000 000</p>
+                <p>Shqipëri: +355 4 123 4567</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-icon">
+                <i class="bi bi-envelope"></i>
+              </div>
+              <div>
+                <h4>Email</h4>
+                <p>info@kalkulatori-ks.com</p>
+                <p>info.al@kalkulatori.com</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-icon">
+                <i class="bi bi-clock"></i>
+              </div>
+              <div>
+                <h4>Orari i Punës</h4>
+                <p>E Hënë – E Premte: 08:00 – 17:00</p>
+                <p>E Shtunë: 09:00 – 13:00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="contact-form">
+            <h3 class="mb-4" style="font-family:'Source Sans 3', sans-serif; color: var(--navy); font-weight: 800;">
+              Dërgoni Mesazh
+            </h3>
+
+            <form id="contactForm">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <label class="form-label">Emri dhe Mbiemri</label>
+                  <input
+                    type="text"
+                    name="from_name"
+                    class="form-control"
+                    placeholder="Emri juaj"
+                    required
+                  >
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Email Adresa</label>
+                  <input
+                    type="email"
+                    name="from_email"
+                    class="form-control"
+                    placeholder="email@example.com"
+                    required
+                  >
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Numri i Telefonit</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    class="form-control"
+                    placeholder="+383 / +355 ..."
+                  >
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Shërbimi i Interesuar</label>
+                  <select name="service" class="form-select">
+                    <option value="">Zgjidhni shërbimin</option>
+                    <option value="Kontabilitet dhe Financa">Kontabilitet dhe Financa</option>
+                    <option value="Regjistrim Biznesi">Regjistrim Biznesi</option>
+                    <option value="Prokurim Publik">Prokurim Publik</option>
+                    <option value="Auditim dhe Raportim">Auditim dhe Raportim</option>
+                    <option value="Menaxhim Pagash / HR">Menaxhim Pagash / HR</option>
+                    <option value="Tjetër">Tjetër</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Mesazhi Juaj</label>
+                  <textarea
+                    name="message"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Si mund t'ju ndihmojmë?"
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="col-12">
+                  <button
+                    type="submit"
+                    id="submitBtn"
+                    class="btn w-100 py-3 fw-bold"
+                    style="background: var(--blue); color: #fff; border: 0; border-radius: 12px;"
+                  >
+                    Dërgo Mesazhin
+                  </button>
+                </div>
+
+                <div class="col-12">
+                  <div id="formStatus" class="small fw-bold"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer w-100">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-md-6 col-lg-4">
+          <h4 class="footer-brand">
+            <span class="footer-logo-box">
+              <img src="Kalkulatori_Finale_Logo_1776347682598.png" alt="Kalkulatori Logo">
+            </span>
+            <span>Kalkulatori</span>
+          </h4>
+          <p>
+            Ofrojmë shërbime profesionale të financave dhe kontabilitetit për
+            biznese në Shqipëri dhe Kosovë. Partneri juaj i besuar financiar
+            që nga viti 2010.
+          </p>
+
+          <div class="social">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-2">
+          <h5>Menu</h5>
+          <ul>
+            <li><a href="#ballina">Ballina</a></li>
+            <li><a href="#sherbimet">Shërbimet</a></li>
+            <li><a href="#procesi">Si Punojmë</a></li>
+            <li><a href="#ku-operojme">Ku operojmë</a></li>
+            <li><a href="#ligjet">Ligjet</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <h5>Shërbimet</h5>
+          <ul>
+            <li><a href="#kontakt">Regjistrim Biznesi</a></li>
+            <li><a href="#kontakt">Financa dhe Kontabilitet</a></li>
+            <li><a href="#kontakt">Prokurim Publik</a></li>
+            <li><a href="#kontakt">Auditim dhe Raportim</a></li>
+            <li><a href="#kontakt">Pagat dhe HR</a></li>
+            <li><a href="#kontakt">Këshillim Financiar</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <h5>Kontakt</h5>
+          <ul>
+            <li><i class="bi bi-envelope me-2"></i>info@kalkulatori-ks.com</li>
+            <li><i class="bi bi-telephone me-2"></i>+383 44 000 000</li>
+            <li><i class="bi bi-geo-alt me-2"></i>Prishtinë & Tiranë</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between gap-2">
+        <span>© 2026 Kalkulatori. Të gjitha të drejtat e rezervuara.</span>
+        <span>Financa dhe Kontabilitet Profesional</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <script>
+    const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+    const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+    const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+
+    emailjs.init(v8OwVRepT7JCtG0Lz);
+
+    const navbar = document.getElementById("mainNavbar");
+
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 20) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+
+    document.querySelectorAll(".navbar-nav .nav-link").forEach(function (link) {
+      link.addEventListener("click", function () {
+        const navMenu = document.getElementById("navMenu");
+
+        if (navMenu && navMenu.classList.contains("show")) {
+          const collapse = bootstrap.Collapse.getInstance(navMenu);
+          if (collapse) {
+            collapse.hide();
+          }
+        }
+      });
+    });
+
+    const contactForm = document.getElementById("contactForm");
+    const formStatus = document.getElementById("formStatus");
+    const submitBtn = document.getElementById("submitBtn");
+
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Duke dërguar...";
+      formStatus.textContent = "";
+
+      emailjs.sendForm(service_97mw32d, template_1zxxbn9, contactForm)
+        .then(function () {
+          formStatus.style.color = "#15803d";
+          formStatus.textContent = "Mesazhi u dërgua me sukses. Faleminderit që na kontaktuat.";
+          contactForm.reset();
+        })
+        .catch(function () {
+          formStatus.style.color = "#b91c1c";
+          formStatus.textContent = "Pati një problem me dërgimin e mesazhit. Kontrolloni EmailJS ID-të.";
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Dërgo Mesazhin";
+        });
+    });
+  </script>
+</body>
+</html>
